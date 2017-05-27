@@ -12,7 +12,7 @@ import petGameAssignment.Food;
 //import petGameAssignment.Banana;
 
 public class GameEnviornment {
-	private int noOfDays = 0;
+	private int noOfDays = 0;     
 	private int noOfPlayers = 0;
 	private Scanner user = new Scanner(System.in);
 	private ArrayList<Player> listOfPlayers = new ArrayList<Player>();
