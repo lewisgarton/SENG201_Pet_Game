@@ -39,7 +39,19 @@ public class Player {
 	private double price;
 	private double money;
 	//String choice= Scanner.nextLine();
-
+	
+	
+	
+	
+	
+	
+	public void setNumberOfPets(int numPets){
+		numberOfPets = numPets;		
+	}
+	
+	
+	
+	
 	/**
 	 * Constructs a player with initialised account
 	 */

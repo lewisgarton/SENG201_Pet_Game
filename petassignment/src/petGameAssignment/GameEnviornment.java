@@ -12,17 +12,140 @@ import petGameAssignment.Food;
 //import petGameAssignment.Banana;
 
 public class GameEnviornment {
+	private final int MAX_PLAYERS = 3;
+	private final int MIN_PLAYERS = 1;
+	private final int MAX_PETS = 3;
+	private final int MIN_PETS = 1;
+	private final int MAX_DAYS = 100;
+	private final int MIN_DAYS = 1;
+	private String question;
 	private int noOfDays = 0;     
 	private int noOfPlayers = 0;
 	private Scanner user = new Scanner(System.in);
 	private ArrayList<Player> listOfPlayers = new ArrayList<Player>();
-	//private ArrayList<String> listOfNames;
 	private ArrayList<Food> listOfFood = new ArrayList<Food>();
 	private ArrayList<Toy> listOfToys =  new ArrayList<Toy>();
 	private ArrayList<Pet> listOfPets = new ArrayList<Pet>();
 	private ArrayList<String> listOfNames = new ArrayList<String>();
 	private ArrayList <Item> item = new ArrayList<Item>();
 	private Player activePlayer;
+	
+	
+	
+	
+	
+	
+	/**
+	 * Fills the listOfPets ArrayList with initial pet objects
+	 */
+	public void createPets(){
+		// Create Objects
+		Cat cat = new Cat();
+		Dog dog = new Dog();
+		Hedgehog hedgehog = new Hedgehog();
+		GuineaPig guineaPig = new GuineaPig();
+		Monkey monkey = new Monkey();
+		Parrot parrot = new Parrot();
+		
+		// Append objects to array list
+		listOfPets.add(cat);		
+		listOfPets.add(dog);		
+		listOfPets.add(guineaPig);
+		listOfPets.add(hedgehog);		
+		listOfPets.add(monkey);
+		listOfPets.add(parrot);		
+	}
+	
+	
+	
+	/**
+	 * Fills the listOfFood ArrayList with initial Food objects
+	 */
+	public void createFood(){
+		// Create food objects
+		Banana banana = new Banana();
+		Lettuce lettuce = new Lettuce();
+		Seeds seeds = new Seeds();
+		Nut nut = new Nut();
+		Tuna tuna = new Tuna();
+		Bone bone = new Bone();
+		
+		// append objects to array list		
+		listOfFood.add(banana);		
+		listOfFood.add(lettuce);		
+		listOfFood.add(seeds);		
+		listOfFood.add(nut);		
+		listOfFood.add(tuna);
+		listOfFood.add(bone);
+	}
+	
+	
+	/**
+	 * Fills the listOfToys ArrayList with initial toy objects
+	 */
+	public void createToys(){
+		
+		// Create toy objects
+		CardboardBox cardboardBox = new CardboardBox();
+		CottonRope cottonRope = new CottonRope();
+		LaserPointer laserPointer = new LaserPointer();
+		PaperBag paperBag = new PaperBag();
+		SnuggleSack snuggleSack = new SnuggleSack();
+		ThrowingStick throwingStick = new ThrowingStick();
+		
+		// Append objects to array list
+		listOfToys.add(cardboardBox);
+		listOfToys.add(cottonRope);
+		listOfToys.add(laserPointer);
+		listOfToys.add(paperBag);
+		listOfToys.add(snuggleSack);
+		listOfToys.add(throwingStick);
+	}
+	
+	
+	public void setNumberOfPlayers(){
+		String question = "How many players are there? Please"
+				+ " enter a number between " + MIN_PLAYERS + " and " + MAX_PLAYERS;
+		
+		noOfPlayers = askForInt(question, MIN_PLAYERS, MAX_PLAYERS);
+		
+	}
+	
+	public void setNumberOfDays(){
+		question = "How many days do you wish to play for? Please"
+				+ " enter a number between " + MIN_DAYS + " and " + MAX_DAYS;
+		
+		noOfDays = askForInt(question, MIN_DAYS, MAX_DAYS);
+	}
+	
+	public boolean isNameUnique(String name){
+		boolean unique = true;
+		if(listOfNames.contains(name)){
+			unique = false;
+		}
+		return unique;
+	}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// stters and getters
 	
@@ -57,105 +180,58 @@ public class GameEnviornment {
 	
 // pet settings	
 	
-	/**
-	 * Fills the listOfPets ArrayList with initial pet objects
-	 */
-	public void createPets(){
-		// Create Objects
-		Cat cat = new Cat();
-		Dog dog = new Dog();
-		Hedgehog hedgehog = new Hedgehog();
-		GuineaPig guineaPig = new GuineaPig();
-		Monkey monkey = new Monkey();
-		Parrot parrot = new Parrot();
-		
-		// Append objects to array list
-		listOfPets.add(cat);		
-		listOfPets.add(dog);		
-		listOfPets.add(guineaPig);
-		listOfPets.add(hedgehog);		
-		listOfPets.add(monkey);
-		listOfPets.add(parrot);		
-	}
+
 	
-	
-// food settings	
-	/**
-	 * Fills the listOfFood ArrayList with initial Food objects
-	 */
-	public void createFood(){
-		// Create food objects
-		Banana banana = new Banana();
-		Lettuce lettuce = new Lettuce();
-		Seeds seeds = new Seeds();
-		Nut nut = new Nut();
-		Tuna tuna = new Tuna();
-		Bone bone = new Bone();
-		
-		// append objects to array list		
-		listOfFood.add(banana);		
-		listOfFood.add(lettuce);		
-		listOfFood.add(seeds);		
-		listOfFood.add(nut);		
-		listOfFood.add(tuna);
-		listOfFood.add(bone);
-	}
+
 	
 	
 // toy settings	
-	/**
-	 * Fills the listOfToys ArrayList with initial toy objects
-	 */
-	public void createToys(){
-		
-		// Create toy objects
-		CardboardBox cardboardBox = new CardboardBox();
-		CottonRope cottonRope = new CottonRope();
-		LaserPointer laserPointer = new LaserPointer();
-		PaperBag paperBag = new PaperBag();
-		SnuggleSack snuggleSack = new SnuggleSack();
-		ThrowingStick throwingStick = new ThrowingStick();
-		
-		// Append objects to array list
-		listOfToys.add(cardboardBox);
-		listOfToys.add(cottonRope);
-		listOfToys.add(laserPointer);
-		listOfToys.add(paperBag);
-		listOfToys.add(snuggleSack);
-		listOfToys.add(throwingStick);
+	
+	
+	
+	
+	public void createPlayers(){
+		for(int i = 1; i <= noOfPlayers; i++){
+			createPlayer(i);
+		}
 	}
 	
-	
-	
-	
-// player settings	
 	
 	/**
 	 * Creates a Player and their initial pets.
 	 * @param playerNumber The number of the current player
 	 * @return Player created
 	 */
-	public Player createPlayer(int playerNumber){
+	public void createPlayer(int playerNumber){
 		String name;
-		int noOfPets;
 		
 		// get players name, and check it is unique
 		while(true){
 			name = askForString("What is the name of player " + playerNumber, 3, 10);
-			if(!listOfNames.contains(name.toLowerCase())){listOfNames.add(name.toLowerCase()); 
-			break;}
+			if(isNameUnique(name)){
+				listOfNames.add(name.toLowerCase());
+				break;
+			}
 			System.out.println("That name has already been used, please try again");
 		}
 		
 		// create player
-		Player currentPlayer = new Player(name);		
-		noOfPets = askForInt("How many pets do you want to play with? Choose a number between 1 and 3", 1, 3);
-		for(int i = 0; i < noOfPets; i++){
-			currentPlayer.addPet(choosePet());
-		}		
-		return currentPlayer;
+		Player currentPlayer = new Player(name);	
+		listOfPlayers.add(currentPlayer);
+		activePlayer = currentPlayer;
+		addPets();
 	}
 	
+	public void addPets(){
+		int noOfPets;
+		question = "How many pets do you want to play with? "
+				+ "Choose a number between " + MIN_PETS + " and " + MAX_PETS;
+		noOfPets = askForInt(question, MIN_PETS, MAX_PETS);
+		for(int i = 0; i < noOfPets; i++){
+			activePlayer.addPet(choosePet());
+		}
+	
+	}
 	
 	/**
 	 * Allows the user to view pet attributes choose a pet and a name.
@@ -275,20 +351,8 @@ public class GameEnviornment {
 	
 	
 	
-	// game setup
 	
-	public void setUp(){
-		createPets();
-		createFood();
-		createToys();
-		noOfPlayers = askForInt("How many players are there? Please enter a number between 1 and 3 ", 1, 3);
-		noOfDays = askForInt("How many days do you wish to play for?", 1, 100);
-		
-		
-		for(int i = 1; i <= noOfPlayers; i++){
-			listOfPlayers.add(createPlayer(i));
-		}		
-	}
+	
 	
 	
 	
@@ -305,6 +369,7 @@ public class GameEnviornment {
 					
 			for(int day = 1; day <= noOfDays; day++){  		//for each day
 			int choice;
+			
 			boolean flag = true;
 			while(flag){
 				System.out.println("Player: " + activePlayer.getName() + "\n" + "Day: " + day); //print player and days
@@ -320,7 +385,7 @@ public class GameEnviornment {
 					break;
 				case 3: // interact with pet
 					break;
-				case 4: // Skip day
+				case 4: // Skip to next day
 					flag = false;
 					break;
 				}
@@ -361,42 +426,34 @@ public class GameEnviornment {
 		while(true){
 			int choice;
 			String question = "This is the store. Please select a choice: \n";
-			question += "1 View food for sale\n";
-			question += "2 View toys for sale\n";
-			question += "3 View player stats\n";
-			question += "4 View price of items for sale \n";
-			question += "5 Purchase food\n";
-			question += "6 Purchase toys\n";
+			question += "1 View Your current balance\n";
+			question += "2 View your inventory\n";
+			question += "3 View food for sale\n";
+			question += "4 View toys for sale\n";
+			question += "5 Go Back\n";
 			
 			
 			choice = askForInt(question, 1, 5);
 			
 			switch(choice){
 			case 1:{
-				//System.out.println("Your current balance is " + activePlayer.getAccountBalance());
-				chooseFood();
-				showFood();
-				
+				System.out.println("Your current balance is " + activePlayer.getAccountBalance());				
 				break;
 			}
 			case 2:{
 				System.out.print(activePlayer.showInventory());
-				//showToys();
 				break;
 			}
 			case 3:{
-				chooseFood();
-			
+				chooseFood();			
 				break;
 			}
 			case 4:{
 				chooseToy();
-				break;
-				
+				break;				
 			}
 			case 5:
-				return;
-				
+				return;				
 			}
 		}
 	}
@@ -570,24 +627,7 @@ public void chooseToy(){
 		}
 	}
 	
-	public static void main(String[] args){
-		GameEnviornment newGame = new GameEnviornment();
-		//newGame.createToys();
-		//newGame.createFood();
-		//newGame.activePlayer = new Player();
-		//newGame.activePlayer.setAccountBalance(1000);
-		//newGame.viewStore();
-		//newGame.choosePet();
-		//newGame.showFood();
-	    //newGame.playGame();
-		//newGame.chooseFood();
-		//newGame.displayStats(player);
-		//newGame.selectPet();
-		//newGame.chooseFood();
-		newGame.setUp();
-		newGame.playGame();
-		
-		}
+	
 	}
 	
 	
