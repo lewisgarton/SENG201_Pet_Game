@@ -12,28 +12,30 @@ import petGameAssignment.Pet.Mood;
  */
 
 public class Pet {
-	
-	// private instance variables
-	protected Player owner;           // stores the owner of the pet 
+	//USED///
 	protected String name;            // stores the name of the pet
 	protected String species;         // stores the type/species of pet
 	protected String favouriteToy;    // stores the pet's favourite toy value
 	protected String favouriteFood;   // stores the pet's favourite food value
-	protected String food;       // stores the food's value
-	protected String toy;        //stores the toy's value
 	protected double weight;     // stores the weight value of the pet
 	protected int appetite;      // stores the pet's appetite value
 	protected int sleepiness;    //stores how much sleep a pat requires
 	protected int playfulness;   // stores how playful a pet is
+	
+	
+	// private instance variables
+	protected Player owner;           // stores the owner of the pet 
+	
+	protected String food;       // stores the food's value
+	protected String toy;        //stores the toy's value
+	
+	
 	protected Mood mood;         // stores the pet's mood value 
-	protected int tastiness;     // stores the food's tastiness value
-    protected int nutrition;     // stores the food's nutrition value
-    protected int relief;        // stores the bathroom use/need relief amount 
-    protected int roughness;     // stores the level of a pet's boredom
+	  
+     
+    
     protected String petMood;    // determines the pet's type of mood
-    protected int durability;
-    protected int damage;
-    protected String trait;
+    
     protected boolean beenRevived = false; // determines if a pet has been revived before.
     protected int actionsToday = 0; // keeps track of how many actions the pet has performed
 	
@@ -43,18 +45,33 @@ public class Pet {
 	protected boolean isTired;        // determines whether a pet is tired or not
 	protected boolean isHungry;       // determines whether a pet is hungry or not
 	protected boolean isHealthy ;     // determines whether a pet is healthy or not
-	protected boolean isAlive;        // determines whether a pet is alive or dead
+	protected boolean isAlive = true;        // determines whether a pet is alive or dead
 	protected boolean isMissbehaving = false; // determines whether a pet is missbehaving or not
 	private boolean isSick = false; // determines if the pet is sick
-	
+	private boolean isRevived = false;
 	
 	//Status variables
+	private String favFood;
+	private final int MAX_LEVEL = 100;
+	private final int MIN_LEVEL = 0;
 	protected int eatLevel = 100;
 	protected int sleepLevel = 100;
 	protected int playLevel = 100;
 	protected int toiletLevel = 100;
+	protected int happyLevel = 100;
+	protected int actions = 0;
+	
 	
 ///////////////////////////////////////////////////////////////////////////	
+	public void statDecrease(){
+		eatLevel -= appetite ;
+		sleepLevel -= sleepiness;
+		playLevel -= playfulness;
+		toiletLevel -= 25;
+		updateHealth();
+	}
+	
+	
 	public int getEatLevel(){
 		return eatLevel;
 	}
@@ -71,7 +88,7 @@ public class Pet {
 		sleepLevel = value;
 	}
 	
-	public int getplayLevel(){
+	public int getPlayLevel(){
 		return playLevel;
 	}
 	
@@ -87,91 +104,21 @@ public class Pet {
 		toiletLevel = value;
 	}
 
-//////////////////////////////////////////////////////////////////////////////	
-	//Constructors
-	/*
-	public void correctBehavior{
-		int answer;
-		System.out.println("This pet is currently missbehaving! \n" + "Would you like to punish the pet?");
-		// ask user for a yes or no answer
-		if(answer == 1){
-			// change missbehaving to false
-			// change pets mood to sad
-			// print response
-		} 
-		else {
-			//print warning
-		}
-	}
-	*/
-	
-	
-	/*
-	public void heal(){
-		int answer;
-		double healAmmount = 10;
-		System.out.println("This pet is currently sick! \n Would you like to heal your pet for: " + healAmmount);
-		// ask user for yes or no answer
-		if(answer == 1){
-			//Check balance of player
-			// if player has enough funds
-				//deduct ammount
-				//set pet to healthy
-				// make pet happy
-			// else
-				// tell the player they do not have enough funds
-		}
-		else{
-			//print warning
-		}
-		
-	}
-	
-	*/
-	
-	
-	/*
-	public void checkStatus(){
-		return;
-		// Check stats, if past threshold call killpet.
-	}
-	
-	
-	
-	public void killPet(){
-		int answer;
-		isAlive = false;
-		System.out.println("One of this pets stats has fallen too low and has died");
-		if(beenRevived = false;){
-			// Ask user if they would like to revive the pet
-			if(answer == 1){
-				isAlive = true;
-				System.out.println("Your pet has been revived!");
-			}
-			else {
-				System.out.println("Your pet will now remain dead for the rest of the game!");
-			}
-			beenRevived = true;
-		}
-		else {
-			System.out.println("Sorry this pet has been revived once before, you can only revive a pet once.");
-		}
-	}
-	
-	*/
-	
-	
-	////////////////////////////////////////////////
+
 	public void incrementAction(){
-		actionsToday += 1;		
+		actions += 1;		
 	}
 	
 	public int getActionCount(){
-		return actionsToday;
+		return actions;
 	}
 	
-	public void resetActions(){
-		actionsToday = 0;
+	public void updateHealth(){
+		if(eatLevel <= MIN_LEVEL){isAlive = false;}
+		if(sleepLevel <= MIN_LEVEL){isAlive = false;}
+		if(playLevel <= MIN_LEVEL){isAlive = false;}
+		if(toiletLevel <= MIN_LEVEL){isAlive = false;}
+		if(happyLevel <= MIN_LEVEL){isAlive = false;}
 	}
 	
 	/**
@@ -190,10 +137,6 @@ public class Pet {
 
 	public String getTrait() {
 		return trait;
-	}
-
-	public void setTrait(String trait) {
-		this.trait = trait;
 	}
 
 	/**
@@ -595,124 +538,65 @@ public class Pet {
 		return isPlayful;
 		}	
 		
-	/**
-	 * Find the toilet need depending on the meal size
-	 * @param mealSize
-	 */
 	
-	public int toiletNeed(MealSize mealSize) {
-		if (mealSize == MealSize.SMALL) {
-			 relief +=1;
-			 weight += 1;
-			 System.out.println("Your pet will need to use the toilet shorlty");
-		} else if (mealSize == MealSize.LARGE) {
-			 relief +=2;
-			 weight += 2;
-			 System.out.println("Your pet needs to use the toilet urgently");
-		} if (relief > 0){
-			setToiletNeed(true);
-			
-		}
-		return relief;
-	}
 	/**
 	 * Feed the pet 
 	 * @param food
 	 * @return
 	 */
-	public boolean feed(String food){
-		Tuna petFood = new Tuna();
-		Cat cat = new Cat();
-		Pet pet = new Pet();
-
-		 petFood.nutritionValue(food);
-		 
-		 cat.toiletNeed(MealSize.SMALL);
-		 if (appetite >0) {
-				System.out.println("Your pet is still hungry");
-			} else 
-				System.out.println("Your pet is full up");
-		 
-		 System.out.println(cat.petMood("lettuce"));
-		 return isHungry;
-	}	 
-		
-public boolean useToilet() {
-		
-		if (needsBathroom == true) {	
-		relief += relief; 
-		weight--;
+	public void feed(Food food){
+		if(food.getMealSize() == MealSize.SMALL){
+			toiletLevel -= 25;
+		}else {
+			toiletLevel -= 50;
 		}
-		if (relief <= 0){ 
-			setToiletNeed(false);	
+		eatLevel += food.getNutrition();				
+		if(food.type.equals(favFood)){
+			happyLevel += food.getNutrition();
 		}
-		return needsBathroom;
-		}
-/*		
-	public boolean useToilet() {
-		toiletLevel += 50;
+		happyLevel += food.getTastiness();
+		weight += 0.2;
+		boundLevels();		
+	}
+	
+	public void boundLevels(){
+		if(happyLevel > 100) happyLevel = 100;
+		if(happyLevel < 0) happyLevel = 0;
+		if(eatLevel > 100) eatLevel = 100;
+		if(eatLevel < 0) eatLevel = 0;
+		if(sleepLevel > 100) sleepLevel = 100;
+		if(sleepLevel < 0) sleepLevel = 0;
+		if(happyLevel > 100) happyLevel = 100;
+		if(happyLevel < 0) happyLevel = 0;
 		if(toiletLevel > 100) toiletLevel = 100;
+		if(toiletLevel < 0) toiletLevel = 0;
+		if(playLevel > 100) playLevel = 100;
+		if(playLevel < 0) playLevel = 0;
 	}
-*/	 
-		
-			//if (isHungry == true)
-		/*	
-			int nutritionValue = petFood.nutritionValue(food);
-			nutrition += nutritionValue;
-			//petMood(petFood);
-			String petMood = petMood(petFood);
-			System.out.println(petFood.getNutrition());
-			if (appetite >0) {
-				System.out.println("Your pet is still hungry");
-			} else 
-				System.out.println("Your pet is full up");
-			int toiletNeed = cat.toiletNeed(petFood.getMealSize());
-			relief += toiletNeed;
-			int tasty = petFood.tastinessValue(food);
-			tastiness += tasty;
-		
-			System.out.println("tastiness:" + petFood.getTastiness());
-			
-			System.out.println(getMood());
-			weight += 2;
-			if (appetite > 0){
-				setHungry(true);
-			}
-			*/
-		
-	
-	
-	
-	public boolean play(String toy){
-		SnuggleSack snuggleSack = new SnuggleSack();
-		Hedgehog hedgehog = new Hedgehog();
-		
-		if(toy == favouriteToy) {
-			hedgehog.setMood(Mood.HAPPY);
-			appetite += 2;
-			sleepiness +=2;
-			durability +=2;
-			damage +=4;
-		} else
-			hedgehog.setMood(Mood.CONTENT);
-			appetite +=2;
-			sleepiness +=2;
-			durability +=1;
-			damage +=3;
-			snuggleSack.checkBroken();
-			if (snuggleSack.checkBroken() == true) {
-				System.out.println("Your pet need a new toy.Your pet's toy is broken");
-			}
-			if (sleepiness >0) {
-				hedgehog.setIsTired(true);
-				System.out.println("Your pet needs to sleep");
-			}
-		return isPlayful;
-		
+
+
+	public void goToilet(){
+		toiletLevel += 75;
+		boundLevels();
 	}
-	public void sleep(){
-		sleepiness += 100;
-		if(sleepiness > 100) sleepiness = 100;
+	
+	
+	
+	public void play(Toy toy){
+		if(toy.type.equals(favouriteFood)){
+			happyLevel += 50;
+		}
+		happyLevel += 50;
+		toy.addDamage(25);
+		eatLevel -= toy.getEffort();
+		sleepLevel -= toy.getEffort();		
+		boundLevels();		
+	}
+	
+	
+	public void goToSleep(){
+		sleepLevel += 100;
+		boundLevels();
 	}
 	/**
 	 * String representation of a pet
@@ -738,7 +622,17 @@ public boolean useToilet() {
 		return formatted;
 		
 	}
+	public void incrementActions(){
+		actions++;
+	}
 	
+	public void resetActions(){
+		actions = 0;
+	}
+	
+	public int getActions(){
+		return actions;
+	}
 	
 	public String getStats(){
 		String formatted = "";
@@ -753,6 +647,19 @@ public boolean useToilet() {
 		formatted += "============================\n";
 		return formatted;
 	}
+	
+	public void resetStats(){
+		eatLevel = 100;
+		sleepLevel = 100;
+		playLevel = 100;
+		toiletLevel = 100;
+		happyLevel = 100;
+		
+		
+		
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		Cat cat = new Cat();
@@ -771,5 +678,19 @@ public boolean useToilet() {
 		//pet.setMood(Mood.SAD);
 		//System.out.println(pet.play("snuggleSack"));
 		System.out.println(cat.petMood("tuna"));
+	}
+
+	/**
+	 * @return the isRevived
+	 */
+	public boolean isRevived() {
+		return isRevived;
+	}
+
+	/**
+	 * @param isRevived the isRevived to set
+	 */
+	public void setRevived(boolean isRevived) {
+		this.isRevived = isRevived;
 	}
 }

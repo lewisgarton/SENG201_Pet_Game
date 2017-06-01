@@ -23,7 +23,7 @@ public class Player {
 	
 	String name; // player's name
 	
-	private double accountBalance; // player's account balance of how much money they have to spend at the store
+	private double accountBalance = 100; // player's account balance of how much money they have to spend at the store
 	ArrayList<Pet> pets = new ArrayList<Pet>();  //list of pets available to the player
 	public ArrayList<Food> petFood = new ArrayList<Food>();  // list pf food available to the player
 	public ArrayList<Toy> petToys = new ArrayList<Toy>();    // list of toys available to the player
@@ -38,12 +38,15 @@ public class Player {
 	private int numberOfPets;
 	private double price;
 	private double money;
+	private int score = 0;
 	//String choice= Scanner.nextLine();
 	
 	
 	
 	
-	
+	public void deposit(double amount){
+		accountBalance += amount;
+	}
 	
 	public void setNumberOfPets(int numPets){
 		numberOfPets = numPets;		
@@ -136,6 +139,9 @@ public class Player {
 	public void setToys(ArrayList<Toy> toys) {
 		this.petToys = toys;
 	}
+	
+	
+	
 	/**
 	 * Retrieves the number of pets from the player's list of pets
 	 * @return
@@ -261,84 +267,27 @@ public class Player {
 		return petFood;
 		}
 
-		/**
-		* Food Store. The player can view a list of food items available and buy several items at a time
-		* @param item
-		* @return
-		*/
-		public ArrayList<Food>  purchaseFood(Item item) {
-		Player player = new Player();
-
-		while(player.getAccountBalance() <0 ){
-
-		System.out.println("Updated balance account: " + getAccountBalance());}
-		if (affordItem(item) == true) {
-		if (item instanceof Food) {
-		petFood.add((Food) item);
-
-		}}
-		System.out.println("Food inventory: " );
-		System.out.println("================================");
-		for (Item food : petFood) {
-		System.out.println( food );
-		}
-		System.out.println("Updated balance account: " + getAccountBalance());
-
-		return petFood;
+		
+		public boolean purchaseFood(Food item) {
+			if(accountBalance >= item.getPrice()){
+				petFood.add(item);
+				accountBalance = accountBalance - item.getPrice();
+				return true;
+			}
+			return false;
 		}
 		
-		public boolean  purchaseFoodcheck(Item item) {
-			Player player = new Player();
-
-			while(player.getAccountBalance() <0 ){
-
-			System.out.println("Updated balance account: " + getAccountBalance());}
-			if (affordItem(item) == true) {
-			if (item instanceof Food) {
-			petFood.add((Food) item);
-
-			}}
-			System.out.println("Food inventory: " );
-			System.out.println("================================");
-			for (Item food : petFood) {
-			System.out.println( food );
+		public boolean purchaseToy(Toy item) {
+			if(accountBalance >= item.getPrice()){
+				petToys.add(item);
+				accountBalance = accountBalance - item.getPrice();
+				return true;
 			}
-			System.out.println("Updated balance account: " + getAccountBalance());
-
-			return true;
-			}
-		public void showFood( ArrayList<Food> petFood){
-			Item item = new Item();
-			petFood = purchaseFood(item);
-			System.out.println("Food inventory: " + petFood);
+			return false;
 		}
-		/**
-		* Toys Store. The player can view a list of toys items available and buy several items at a time
-		* @param item
-		* @return
-		*/
-		public ArrayList<Toy> purchaseToys(Item items)	{
-		Player playerOne = new Player();
-
-		while(playerOne.getAccountBalance() <0 ){
-		System.out.println("Updated balance account: " + getAccountBalance());}
-		if (affordItem(items) == true) {
-		if (items instanceof Toy) {
-		petToys.add((Toy) items);
-
-		}}
-		System.out.println("Toys inventory: " );
-		System.out.println("================================");
-		for (Item toys :petToys) {
-		System.out.println(toys);
-		}
-
-		System.out.println("Updated balance account: " + getAccountBalance());
-
-
-		return petToys;
-		}
-
+		
+		
+		
 		/**
 		* Creates the store with food and toys items available to buy by
 		* creating instances of Food and Toy subclasses to be used in the store
@@ -478,7 +427,6 @@ public class Player {
 		for(int j = 0; j < petFood.size(); j++){
 			Food food = petFood.get(j);
 			inventory += food.type + "\n";
-			System.out.println(inventory);
 		}
 		
 		inventory += "======Your Toys=======\n";
@@ -503,4 +451,17 @@ public class Player {
 
 	}
 
+	
+	
+	public int getScore(){
+		for(int i = 0; i < pets.size(); i++){
+			Pet pet = pets.get(i);
+			score += pet.getEatLevel();
+			score += pet.getPlayfulness();
+			score += pet.getAppetite();
+			score += pet.getToiletLevel();
+			if(!pet.beenRevived){ score -= 50;}
+		}
+		return score;
+	}
 }

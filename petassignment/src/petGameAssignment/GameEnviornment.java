@@ -1,4 +1,5 @@
 package petGameAssignment;
+import java.util.concurrent.ThreadLocalRandom;
 
 /// test
 import java.io.BufferedReader;
@@ -18,6 +19,7 @@ public class GameEnviornment {
 	private final int MIN_PETS = 1;
 	private final int MAX_DAYS = 100;
 	private final int MIN_DAYS = 1;
+	private final double DAILY_INCOME = 50.0;
 	private String question;
 	private int noOfDays = 0;     
 	private int noOfPlayers = 0;
@@ -29,7 +31,97 @@ public class GameEnviornment {
 	private ArrayList<String> listOfNames = new ArrayList<String>();
 	private ArrayList <Item> item = new ArrayList<Item>();
 	private Player activePlayer;
+	private Pet activePet;
 	
+	
+	//		START GETTERS AND SETTERS 
+	
+	/**
+	 * Gets the list of initial pet objects
+	 * @return array list of pet objects
+	 */
+	public ArrayList<Pet> getListOfPets(){
+		return listOfPets;
+	}
+	
+	
+	/**
+	 * Gets the list of initial food objects
+	 * @return array list of food objects
+	 */
+	public ArrayList<Food> getListOfFood(){
+		return listOfFood;
+	}
+	
+	
+	/**
+	 * Gets the list of initial toy objects
+	 * @return array list of toy objects
+	 */
+	public ArrayList<Toy> getListOfToys(){
+		return listOfToys;
+	}
+	
+	
+	
+	
+	//		END GETTERS AND SETTERS
+	
+	/**
+	 * Asks the user a question that requires an integer answer within set boundaries
+	 * @param question The question you wish to be displayed to the user.
+	 * @param min The minimum value
+	 * @param max The maximum value
+	 * @return The integer answer.
+	 */
+	public int askForInt(String question, int min, int max){
+		int givenInt = 0;
+		while(true)
+		{
+			System.out.println(question);
+			try
+			{
+				givenInt = user.nextInt();
+				user.nextLine(); // consume remaining tokens
+				if(givenInt >= min && givenInt <= max) break;
+				System.out.println("Sorry you can only choose between " + min + " and " + max + " please try again.");
+			}
+			catch(Exception e) {
+				System.out.println("Incorrect input: Please type a number.");
+				user.nextLine();
+				
+			}
+		}
+		return givenInt;
+	}
+	
+	
+	/**
+	 * Asks the user a question, for a string answer of a given length range.
+	 * @param question Question to be asked
+	 * @param minLength minimum length of the answer
+	 * @param maxLength maximum length of the answer
+	 * @return String answer to the question
+	 */
+	public String askForString(String question, int minLength, int maxLength){
+		String name;
+		while(true)
+		{
+			System.out.println(question);
+			try
+			{
+				name = user.next();
+				user.nextLine(); // consume remaining tokens
+				if((name.length() >= minLength) && (name.length() <= maxLength)) break;
+				System.out.println("Must be at least " + minLength + " and a maximum of " + maxLength + " Long pleast try again");
+			} 
+			catch(Exception e){
+				System.out.println("Incorect input please try again.");
+				user.nextLine();				
+			}			
+		}
+		return name;		
+	}
 	
 	
 	
@@ -103,6 +195,28 @@ public class GameEnviornment {
 	}
 	
 	
+	
+	/**
+	 * Checks if a name has already been used, if it hasn't, it gets added to the list of names used.
+	 * @param name name to be checked
+	 * @return True if unique, False otherwise
+	 */
+	public boolean isNameUnique(String name){
+		String lowerName = name.toLowerCase();
+		
+		if(listOfNames.contains(lowerName)){
+			return false;
+		}
+		else{
+			listOfNames.add(lowerName);
+			return true;
+		}
+	}
+	
+	
+	/**
+	 * Sets the number of players that are playing in the current game.
+	 */
 	public void setNumberOfPlayers(){
 		String question = "How many players are there? Please"
 				+ " enter a number between " + MIN_PLAYERS + " and " + MAX_PLAYERS;
@@ -111,6 +225,10 @@ public class GameEnviornment {
 		
 	}
 	
+	
+	/**
+	 * Sets the number of days the days the game should be played for.
+	 */
 	public void setNumberOfDays(){
 		question = "How many days do you wish to play for? Please"
 				+ " enter a number between " + MIN_DAYS + " and " + MAX_DAYS;
@@ -118,158 +236,67 @@ public class GameEnviornment {
 		noOfDays = askForInt(question, MIN_DAYS, MAX_DAYS);
 	}
 	
-	public boolean isNameUnique(String name){
-		boolean unique = true;
-		if(listOfNames.contains(name)){
-			unique = false;
-		}
-		return unique;
-	}
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// stters and getters
-	
-	/**
-	 * Returns the listOfPets
-	 * @return listOfPets array list
-	 */
-	public ArrayList<Pet> getPetList(){
-		return listOfPets;
-	}
-	
 	
 	
 	/**
-	 * Returns the listOfFood
-	 * @return listOfFood array list
-	 */
-	public ArrayList<Food> getFoodList(){
-		return listOfFood;
-	}
-	
-	
-	
-	/**
-	 * Returns the listOfToys
-	 * @return listOfToys array list
-	 */
-	public ArrayList<Toy> getToyList(){
-		return listOfToys;
-	}
-	
-	
-// pet settings	
-	
-
-	
-
-	
-	
-// toy settings	
-	
-	
-	
-	
-	public void createPlayers(){
-		for(int i = 1; i <= noOfPlayers; i++){
-			createPlayer(i);
-		}
-	}
-	
-	
-	/**
-	 * Creates a Player and their initial pets.
-	 * @param playerNumber The number of the current player
-	 * @return Player created
+	 * Asks user for players name, constructs a new player.
+	 * Player is then added to the list of players, and set to the active player.
+	 * @param playerNumber sequential number of the player
 	 */
 	public void createPlayer(int playerNumber){
 		String name;
-		
-		// get players name, and check it is unique
 		while(true){
 			name = askForString("What is the name of player " + playerNumber, 3, 10);
 			if(isNameUnique(name)){
-				listOfNames.add(name.toLowerCase());
 				break;
 			}
 			System.out.println("That name has already been used, please try again");
 		}
-		
-		// create player
 		Player currentPlayer = new Player(name);	
 		listOfPlayers.add(currentPlayer);
 		activePlayer = currentPlayer;
-		addPets();
-	}
+		
+	}	
 	
-	public void addPets(){
-		int noOfPets;
-		question = "How many pets do you want to play with? "
-				+ "Choose a number between " + MIN_PETS + " and " + MAX_PETS;
-		noOfPets = askForInt(question, MIN_PETS, MAX_PETS);
-		for(int i = 0; i < noOfPets; i++){
-			activePlayer.addPet(choosePet());
-		}
 	
-	}
+	
 	
 	/**
-	 * Allows the user to view pet attributes choose a pet and a name.
-	 * @return Chosen Pet
+	 * Allows the user to view attributes and create a pet, the pet is then added to the players list of pets. 
 	 */
-	public Pet choosePet(){
-		String petString = new String("");
-		Pet choice = new Pet();
+	public void createPet(){
+		String petQuestion = new String("");
+		Pet pet = new Pet();
 		int selected = 0;
 		String name;		
 		
-		petString += "Please choose a pet to view their attributes" + "\n" ;
+		petQuestion += "Please choose a pet to view their attributes" + "\n" ;
 				
 		
 		for(int i = 0; i < listOfPets.size(); i++){
 			int j = i + 1;
-			petString += "Press " + j + " for : " + listOfPets.get(i).getSpecies() + "\n";
+			petQuestion += "Press " + j + " for : " + listOfPets.get(i).getSpecies() + "\n";
 			
 		}
 		
 		while(true){
-			selected = askForInt(petString, 1, 6);
+			selected = askForInt(petQuestion, 1, 6);
 			
 			switch(selected){
-			case 1: choice = new Cat();
+			case 1: pet = new Cat();
 					break;
-			case 2: choice = new Dog();
+			case 2: pet = new Dog();
 			        break;
-			case 3: choice = new GuineaPig();
+			case 3: pet = new GuineaPig();
 			        break;
-			case 4: choice = new Hedgehog();
+			case 4: pet = new Hedgehog();
 					break;
-			case 5: choice = new Monkey();
+			case 5: pet = new Monkey();
 					break;
-			case 6: choice = new Parrot();
+			case 6: pet = new Parrot();
 					break;
 			}
-			System.out.print(choice.getAttributes());
+			System.out.print(pet.getAttributes());
 			int x = askForInt("Would you like to choose this pet? \n Enter 0 for NO or 1 for YES", 0, 1);
 			if(x == 1){
 				break;
@@ -285,77 +312,54 @@ public class GameEnviornment {
 			System.out.println("That name has already been used, please try again");
 		}
 				
-		choice.setName(name);
-		return choice;
-		
-	}
-	
-
-	
-	/**
-	 * Asks the user a question that requires an integer answer within set boundaries
-	 * @param question The question you wish to be displayed to the user.
-	 * @param min The minimum value
-	 * @param max The maximum value
-	 * @return The integer answer.
-	 */
-	public int askForInt(String question, int min, int max){
-		int givenInt = 0;
-		while(true)
-		{
-			System.out.println(question);
-			try
-			{
-				givenInt = user.nextInt();
-				user.nextLine(); // consume remaining tokens
-				if(givenInt >= min && givenInt <= max) break;
-				System.out.println("Sorry you can only choose between " + min + " and " + max + " please try again.");
-			}
-			catch(Exception e) {
-				System.out.println("Incorrect input: Please type a number.");
-				user.nextLine();
-				
-			}
-		}
-		return givenInt;
+		pet.setName(name);
+		activePlayer.addPet(pet);	
 	}
 	
 	
 	
 	/**
-	 * Asks the user a question, for a string answer of a given length range.
-	 * @param question Question to be asked
-	 * @param minLength minimum length of the answer
-	 * @param maxLength maximum length of the answer
-	 * @return String answer to the question
+	 * Creates the players, and pets to be used in the game.
 	 */
-	public String askForString(String question, int minLength, int maxLength){
-		String name;
-		while(true)
-		{
-			System.out.println(question);
-			try
-			{
-				name = user.next();
-				user.nextLine(); // consume remaining tokens
-				if((name.length() >= minLength) && (name.length() <= maxLength)) break;
-				System.out.println("Must be at least " + minLength + " and a maximum of " + maxLength + " Long pleast try again");
-			} 
-			catch(Exception e){
-				System.out.println("Incorect input please try again.");
-				user.nextLine();				
-			}			
+	public void setUpPlayers(){
+		int noOfPets;
+		for(int i = 1; i <= noOfPlayers; i++){
+			createPlayer(i);			
+			
+			question = "How many pets do you want to play with? "
+					+ "Choose a number between " + MIN_PETS + " and " + MAX_PETS;
+			noOfPets = askForInt(question, MIN_PETS, MAX_PETS);
+			for(int j = 0; j < noOfPets; j++){
+				createPet();
+			}
 		}
-		return name;		
+	}
+	public void killPet(){
+		int choice;
+		System.out.println(activePet.name + " the " + activePet.species + " has died!");
+		if(!activePet.isRevived()){
+			choice = askForInt("Would you like to revive this pet?, if not your pet will remain dead.\nPress 1 for yes or 0 for no.", 0, 1);
+			if(choice > 0){
+				activePet.setRevived(true);	
+				System.out.println("Your pet has been revived.");
+				activePet.resetStats();
+				return;
+			}
+			else{
+				System.out.println("Your pet has been removed from the game.");
+				activePlayer.pets.remove(activePet);
+				return;
+			}
+		}
+		else{
+			System.out.println("Your pet has been revived before, it has been removed from the game");
+			activePlayer.pets.remove(activePet);
+		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * Starts the game loop, allowing the players to play the game.
+	 */
 	public void playGame(){
 		String optionQuestion = "What would you like to do? \n"
 				+ "Press 1: View pet stats. \n"
@@ -365,12 +369,21 @@ public class GameEnviornment {
 		
 		
 		for(int i = 0; i < listOfPlayers.size(); i++){ 		//for each player
-			activePlayer = listOfPlayers.get(i);
-					
+			activePlayer = listOfPlayers.get(i);					
 			for(int day = 1; day <= noOfDays; day++){  		//for each day
 			int choice;
+			for(int p = 0; p < activePlayer.pets.size(); p++){
+				activePet = activePlayer.pets.get(p);
+				activePet.statDecrease();
+				if(!activePet.isAlive){
+					killPet();
+				}
+			}
+			//////random event
 			
 			boolean flag = true;
+			if(activePlayer.pets.size() < 1){
+				System.out.println("You dont have any live pets, game over");flag = false; day = 99;}
 			while(flag){
 				System.out.println("Player: " + activePlayer.getName() + "\n" + "Day: " + day); //print player and days
 				// players turn
@@ -384,16 +397,41 @@ public class GameEnviornment {
 					viewStore();
 					break;
 				case 3: // interact with pet
+					interact();
 					break;
 				case 4: // Skip to next day
+					resetPetActions();
+					activePlayer.deposit(DAILY_INCOME);
 					flag = false;
 					break;
 				}
 			}
 			}
+			System.out.println("Your turn is over, your score is: " + activePlayer.getScore());
+			while(true){
+				int cont = askForInt("PRESS 1 TO START THE NEXT PLAYERS GAME", 1, 1);
+				break;
+			}
+			
 	}
+		
 	}
-	///////
+	
+	
+	/**
+	 * Resets the pets action counter.
+	 */
+	public void resetPetActions(){
+		for(int i=0; i < activePlayer.pets.size(); i++){
+			activePlayer.pets.get(i).resetActions();
+		}
+	}
+	
+	
+	/**
+	 * Prints out the chosen players current game stats.
+	 * @param player the player chosen.
+	 */
 	public void displayStats(Player player){
 		String petQuestion = "Choose a pet to view their status. \n";		
 		
@@ -412,6 +450,9 @@ public class GameEnviornment {
 			
 		}
 	}
+	
+	
+	
 	
 	/**
 	 * Shows what objects the player currently owns , their amounts, and the 
@@ -457,44 +498,10 @@ public class GameEnviornment {
 			}
 		}
 	}
-	/**
-	 * Displays a list of food objects for sale and their price
-	 */
-	public void showFood(){
-		Banana banana = new Banana();
-		System.out.println(banana);
-		Bone bone = new Bone();
-		System.out.println( bone);
-		Lettuce lettuce = new Lettuce();
-		System.out.println( lettuce);
-		Nut nut = new Nut();
-		System.out.println( nut);
-		Seeds seeds = new Seeds();
-		System.out.println( seeds);
-		Tuna tuna = new Tuna();
-		System.out.println( tuna);
-	}
-	/**
-	 * Displays a list of toys objects and their price
-	 */
-	public void showToys(){
-		CardboardBox cardboardBox = new CardboardBox();
-		System.out.println(cardboardBox);
-		CottonRope cottonRope = new CottonRope();
-		System.out.println( cottonRope);
-		LaserPointer laserPointer = new LaserPointer();
-		System.out.println( laserPointer);
-		PaperBag paperBag = new PaperBag();
-		System.out.println( paperBag);
-		SnuggleSack snuggleSack = new SnuggleSack();
-		System.out.println( snuggleSack);
-		ThrowingStick throwingStick = new ThrowingStick();
-		System.out.println( throwingStick);
-	}
-	public void chooseFood(){
-		
-		boolean flag = true;
-		
+	
+	
+	public void chooseFood(){		
+		boolean flag = true;		
 		
 		// Create question to ask user
 		String foodQuestion = "=======FOOD FOR SALE======\n";		
@@ -513,8 +520,8 @@ public class GameEnviornment {
 			System.out.print(chosenFood.getInfo());
 			choice = askForInt("Press: 1 to purchace this item \nPress: 0 to go back", 0, 1);
 			if(choice > 0)
-				{
-					if(activePlayer.purchaseFoodcheck(chosenFood)){
+				{	
+					if(activePlayer.purchaseFood(chosenFood)){
 						System.out.println("Food has been purchased and added to your inventory");
 					}
 					else{
@@ -559,6 +566,14 @@ public void chooseToy(){
 	}
 	}
 		
+	// Decrease 
+	public void statDecrease(){
+		for(int i = 0; i < activePlayer.pets.size(); i++){
+			activePet = activePlayer.pets.get(i);
+		}
+	}
+	
+
 	
 	
 	
@@ -586,6 +601,7 @@ public void chooseToy(){
 		
 		
 		int choice = askForInt(question, 0, i);
+		activePet = activePlayer.pets.get(choice);
 		if(choice > activePlayer.pets.size()){return;}
 		question = "What would you like to do with your pet?\n "
 				+ "Press 0: to feed\n"
@@ -609,17 +625,19 @@ public void chooseToy(){
 				break;
 			}
 			case 1: 
-				activePlayer.pets.get(choice).sleep();
+				activePlayer.pets.get(choice).goToSleep();
 				activePlayer.pets.get(choice).incrementAction();
 				System.out.println("Your pet has had a sleep \n");
+				break;
 			case 2:
-				activePlayer.pets.get(choice).useToilet();
+				activePlayer.pets.get(choice).goToilet();
 				activePlayer.pets.get(choice).incrementAction();
 				System.out.println("Your pet has been to the toilet \n");				
 			case 3:
 				if(activePlayer.petToys.size() < 1){System.out.println("You have no Toys");}
 				else{
-					// choose and play with toy
+					activePet.play(getToy());
+					activePlayer.pets.get(choice).incrementAction();
 				}
 			case 4:{flag = false;}
 	
@@ -628,6 +646,121 @@ public void chooseToy(){
 	}
 	
 	
+	public Food getFood(){
+		int i;
+		String question = "";
+		question += "What food would you like to feed your pet?\n";
+		for(i = 0; i < activePlayer.petFood.size(); i++){
+			question += "press " + i + " for " + activePlayer.petFood.get(i).type + "\n";			
+		}
+		int choice = askForInt(question, 0, activePlayer.petFood.size()+1);
+		return activePlayer.petFood.remove(choice);
+		
+		
 	}
+	
+	public Toy getToy(){
+		int i;
+		String question = "";
+		question += "What Toy would you like your pet to play with?\n";
+		for(i = 0; i < activePlayer.petToys.size(); i++){
+			question += "press " + i + " for " + activePlayer.petToys.get(i).type + "\n";			
+		}
+		int choice = askForInt(question, 0, activePlayer.petToys.size()+1);
+		return activePlayer.petToys.get(choice);
+	
+	}
+	
+	public void interact(){
+		while(true){
+			String question = "";
+			question += "Which pet would you like to interact with?\n";
+			int i;
+			for(i = 0; i < activePlayer.pets.size(); i++){
+				Pet pet = activePlayer.pets.get(i);
+				question += "Press " + i + " for " + pet.name + " the " + pet.species + "\n";						
+			}
+			i++;
+			question += "Press " + i + " to go back";
+			int index = askForInt(question, 0, (activePlayer.pets.size()+1));
+			if(index > activePlayer.pets.size()){
+				return;
+			}
+			activePet = activePlayer.pets.get(index);
+			
+			boolean flag = true;
+			while(flag){
+				if(activePet.getActions() > 1){
+					System.out.println("You have now used up this pets 2 actions for today.");
+					flag = false;
+					break;
+				}
+				question = "What would you like to do with your pet?\n"
+						+ "1 Feed pet\n"
+						+ "2 Take pet to the toilet\n"
+						+ "3 Play with the pet\n"
+						+ "4 Put the pet to sleep\n"
+						+ "5 Go back";
+				int choice = askForInt(question, 1, 5);
+			
+				switch(choice){
+				case 1:{
+					if(!activePlayer.petFood.isEmpty()){
+						activePet.feed(getFood());
+						System.out.println("You pet ate the food");
+						activePet.incrementActions();
+					}
+					else{
+						System.out.println("You do not currently have any food.");
+					}
+					break;
+				}
+				case 2:{
+					activePet.goToilet();
+					System.out.println("Your pet went to the toilet");
+					activePet.incrementAction();
+					break;
+				}
+				case 3: {
+					if(activePlayer.petToys.size() > 0){
+						Toy toy = getToy();
+						activePet.play(toy);
+						activePet.incrementActions();
+						System.out.println("You pet played with the toy");
+						if(toy.isBroken){
+							activePlayer.removeToys(toy);
+							System.out.println("The toy has broken, and has been removed from your inventory");
+						}
+					}
+					else{
+						System.out.println("You do not currently have any toys.");
+					}
+					break;
+				}
+				case 4:{
+					activePet.goToSleep();
+					activePet.incrementActions();
+					break;
+				}
+				case 5:
+					flag = false;
+					break;
+				}
+				}
+				}
+		
+			}	
+	
+	public void randomEvent(){
+		for(int i = 0; i < activePlayer.pets.size(); i++){
+			
+		}
+	}
+
+
+}
+
+
+
 	
 	

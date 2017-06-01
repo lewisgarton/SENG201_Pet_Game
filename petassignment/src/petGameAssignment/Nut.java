@@ -1,8 +1,7 @@
 package petGameAssignment;
-
-
-
 import petGameAssignment.Food.MealSize;
+
+
 /**
  * Nut subclass of Food superclass
  * 
@@ -14,15 +13,16 @@ public class Nut extends Food {
 	 * 
 	 */
 	public Nut() {
-		super();
-		this.price = 7;
-		this.nutrition = 2;
-		this.tastiness = 3;
-		this.mealSize = MealSize.SMALL;
+		price = 2;
+		nutrition = 32;
+		tastiness = 15;
+		mealSize = MealSize.SMALL;
 		type = "Nut";
 				
 		
 	}
+	
+	
 	/**
 	 * Constructs a nut object with given price
 	 * @param price
@@ -30,6 +30,8 @@ public class Nut extends Food {
 	public Nut(double price) {
 		this.price = price;
 	}
+	
+	
 	/**
 	 * Returns a string representation of the object
 	 */
@@ -38,5 +40,4 @@ public class Nut extends Food {
 			
 		 return ("Nut: " + price + " dollars");
 	 }    
-
 }

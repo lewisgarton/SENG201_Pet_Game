@@ -1,7 +1,4 @@
 package petGameAssignment;
-
-
-
 import petGameAssignment.Food.MealSize;
 
 /**
@@ -15,14 +12,14 @@ public class Tuna extends Food {
 	 */
 	public Tuna() {
 		super();
-		this.price = 5;
-		this.nutrition = 2;
-		this.tastiness = 2;
+		this.price = 7;
+		this.nutrition = 41;
+		this.tastiness = 28;
 		this.mealSize = MealSize.SMALL;
-		type = "tuna";
-				
-		
+		type = "tuna";		
 	}
+	
+	
 	/**
 	 * Constructs a tuna object with given price
 	 * @param price
@@ -30,6 +27,8 @@ public class Tuna extends Food {
 	public Tuna(double price) {
 		this.price = price;
 	}
+	
+	
 	/**
 	 * Returns a string representation of the object
 	 */
@@ -37,10 +36,6 @@ public class Tuna extends Food {
 			
 		 return ("Tuna: " + price + " dollars");
 	 }    
-
-	public static void main(String[] args) {
-		
-	}
 
 }
 

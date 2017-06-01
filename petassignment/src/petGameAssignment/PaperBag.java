@@ -15,12 +15,11 @@ public class PaperBag extends Toy {
 	 * properties values
 	 */
 	public PaperBag(){ 
-		super();
-		price = 8;
-		durability = 4;
-		damage = 4;
-		type = "Paper Bag";
-		happyness = 4;
+		price = 5;
+		durability = 45;
+		effort = 15;
+		type = "Paper bag";
+		happyness = 45;
 	}
 	
 	/**
@@ -31,13 +30,6 @@ public class PaperBag extends Toy {
 		this.price = price;
 	}
 	
-	/**
-	* Class constructor: creates a throwing stick with a specified durability	
-	*/	
-		
-		public PaperBag(int durability) {
-			this.durability = durability;
-		}
 		
 @Override
 	public String toString(){

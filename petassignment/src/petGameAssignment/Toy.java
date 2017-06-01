@@ -15,10 +15,10 @@ public class Toy extends Item{
 	protected String type;
 	protected double price;
 	protected int durability;
-	protected int damage;
+	protected int damage = 0;
 	protected boolean isBroken;
 	protected String favouriteToy;
-	protected int rigor;
+	protected int effort;
 	protected int happyness;
 
 		
@@ -60,6 +60,12 @@ public class Toy extends Item{
 	}
 	
 	// methods
+	
+	public int getEffort(){
+		return effort;
+	}
+	
+	
 	
 	/**
 	 * Checks to see if the toy is broken, a toy is broken if its damage exceeds its durability
@@ -141,13 +147,19 @@ public class Toy extends Item{
 	public String getInfo(){		 
 		 String formatted = "";
 			formatted += "==========="+ type +"=========== \n";
-			formatted += "Price        	  :\t" + price + "\n";
-			formatted += "Happyness :\t" + happyness + "\n";		
+			formatted += "Price     :\t" + price + "\n";
+			formatted += "Happyness :\t" + happyness + "\n";
+			formatted += "Durability :\t" + durability + "\n";
 			formatted += "============================\n";
 			return formatted;
 		 }
 
-	
+	public void addDamage(int amount){
+		damage += amount;
+		if(damage > durability){
+			isBroken = true;
+		}
+	}
 	
 }
 

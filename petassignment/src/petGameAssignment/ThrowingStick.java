@@ -3,9 +3,7 @@ package petGameAssignment;
  *  A throwing stick toy with a price
  */
 
-public class ThrowingStick extends Toy {
-	
-	
+public class ThrowingStick extends Toy {	
 		
 	// Constructors
 	/**
@@ -13,12 +11,11 @@ public class ThrowingStick extends Toy {
 	 * properties values
 	 */
 	public ThrowingStick(){ 
-		super();
-		price = 8;
-		durability = 4;
-		damage = 4;
-		type = "Throwing Stick";
-		happyness = 4;
+		price = 10;
+		durability = 45;
+		effort = 5;
+		type = "Throwing stick";
+		happyness = 35;
 	}
 	
 	/**
@@ -28,14 +25,7 @@ public class ThrowingStick extends Toy {
 	public ThrowingStick(double price) {
 		this.price = price;
 	}
-	
-	/**
-	* Class constructor: creates a throwing stick with a specified durability	
-	*/	
-		
-		public ThrowingStick(int durability) {
-			this.durability = durability;
-		}
+
 		
 @Override
 	public String toString(){

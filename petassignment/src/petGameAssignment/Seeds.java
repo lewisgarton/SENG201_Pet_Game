@@ -12,14 +12,14 @@ import petGameAssignment.Food.MealSize;
 		 * 
 		 */
 		public Seeds() {
-			super();
-			this.price = 10;
-			this.nutrition = 2;
-			this.tastiness = 4;
-			this.mealSize = MealSize.LARGE;
-			type = "Seeds";		
-			
+			price = 6;
+			nutrition = 43;
+			tastiness = 25;
+			mealSize = MealSize.LARGE;
+			type = "Seeds";				
 		}
+		
+				
 		/**
 		 * Constructs a seeds object with given price
 		 * @param price
@@ -27,6 +27,7 @@ import petGameAssignment.Food.MealSize;
 		public Seeds(double price) {
 			this.price = price;
 		}
+		
 		/**
 		 * Returns a string representation of the object
 		 */
@@ -35,9 +36,4 @@ import petGameAssignment.Food.MealSize;
 			 return ("Seeds: " + price + " dollars");
 		 }    
 
-		public static void main(String[] args) {
-			
-		}
-
-	}
-
+}

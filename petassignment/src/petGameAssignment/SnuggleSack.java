@@ -15,12 +15,11 @@ public class SnuggleSack extends Toy {
  * for price, durability and damage
  */
 	public SnuggleSack() {
-		super();
-		price = 25; 
-		durability = 1;
-		damage = 5;
-		type = "Snuggle Sack";
-		happyness = 4;
+		price = 15;
+		durability = 45;
+		effort = 24;
+		type = "Cardboard Box";
+		happyness = 40;
 	}
 	
 /**
@@ -31,21 +30,8 @@ public class SnuggleSack extends Toy {
 		this.price = price;
 	}
 	
-/**
- * Retrieves the price for this snuggle sack toy
- */
-	public double getPrice() {
-		return price;
-	}
-	
-/**
- * Sets the value of the price of this snuggle sack toy
- */
-	
-	public void setPrice(double price) {
-		this.price = price;
-		
-	}
+
+
 /**
  * Returns the String representation of a snuggle sack object
  */
