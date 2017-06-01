@@ -753,6 +753,8 @@ public void chooseToy(){
 	
 	public void randomEvent(){
 		for(int i = 0; i < activePlayer.pets.size(); i++){
+			int randomNum = ThreadLocalRandom.current().nextInt(0, 100);
+			
 			
 		}
 	}
